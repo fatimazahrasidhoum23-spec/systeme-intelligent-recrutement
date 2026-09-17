@@ -17,11 +17,11 @@ Plateforme de recrutement (ATS) construite en architecture microservices. Le sys
 
 **Connexion**
 
-(glisser ici la capture de l'écran de connexion)
+<img width="912" height="1600" alt="image" src="https://github.com/user-attachments/assets/5e5832c1-06cc-4522-9799-d2e2d7501e7a" />
+
 
 **Espace RH**
 
-(glisser ici la capture du dashboard RH)
 
 ## Architecture
 
@@ -39,21 +39,7 @@ Le projet est composé de plusieurs microservices indépendants, chacun avec sa 
 | RabbitMQ | Communication asynchrone entre services | RabbitMQ |
 | MinIO | Stockage des fichiers (CVs) | MinIO |
 
-## Lancer le projet
 
-Prérequis : Docker et Docker Compose installés.
-
-```bash
-git clone https://github.com/fatimazahrasidhoum23-spec/systeme-intelligent-recrutement.git
-cd systeme-intelligent-recrutement
-
-cp .env.example .env
-# puis renseigner tes propres valeurs dans .env
-
-docker-compose -f docker-compose.global.yml up -d --build
-```
-
-Une fois lancé :
 
 | Service | URL |
 |---|---|
@@ -62,17 +48,4 @@ Une fois lancé :
 | RabbitMQ | http://localhost:15672 |
 | MinIO | http://localhost:9001 |
 
-## Structure du projet
 
-```
-.
-├── docker-compose.global.yml
-├── .env.example
-├── nginx/
-├── Auth_Front/
-├── AuthService/
-├── OffreRh/
-├── Service_ATS/
-├── service-email/
-└── my_project/
-```
