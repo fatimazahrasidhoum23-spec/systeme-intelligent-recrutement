@@ -1,0 +1,283 @@
+##############################################################################
+# docker-compose.global.yml — Lance TOUT le projet PFA en un seul fichier
+# Usage : docker-compose -f docker-compose.global.yml up -d --build
+##############################################################################
+
+
+services:
+
+  # ── INFRASTRUCTURE ────────────────────────────────────────────────────────
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"     # Interface web : http://localhost:15672 (guest/guest)
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - micro-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9001:9001"       # Console : http://localhost:9001 (admin/password)
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio-data:/data
+    networks:
+      - micro-net
+
+  mail-dev:
+    image: maildev/maildev
+    container_name: mail-dev
+    restart: always
+    ports:
+      - "1080:1080"       # Interface web : http://localhost:1080
+      - "1025:1025"       # SMTP
+    networks:
+      - micro-net
+
+  # ── BASES DE DONNÉES ──────────────────────────────────────────────────────
+
+  postgres-auth:
+    image: postgres:15
+    container_name: postgres-auth
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "123456"
+      POSTGRES_DB: ServicAuth
+    volumes:
+      - postgres-auth-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - micro-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  postgres-offre:
+    image: postgres:15
+    container_name: postgres-offre
+    restart: always
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: offreRh
+    volumes:
+      - postgres-offre-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - micro-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U username"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  postgres-email:
+    image: postgres:15
+    container_name: postgres-email
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: emaildb
+    volumes:
+      - postgres-email-data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    networks:
+      - micro-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  postgres-symfony:
+    image: postgres:15
+    container_name: postgres-symfony
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ats_entretien
+    volumes:
+      - postgres-symfony-data:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    networks:
+      - micro-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── SERVICES APPLICATIFS ──────────────────────────────────────────────────
+
+  auth-service:
+    build:
+      context: ./AuthService
+      dockerfile: Dockerfile
+    container_name: auth-service
+    restart: always
+    environment:
+      ASPNETCORE_URLS: http://+:8082
+      ASPNETCORE_ENVIRONMENT: Production
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres-auth:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - micro-net
+
+  offre-service:
+    build:
+      context: ./OffreRh
+      dockerfile: Dockerfile
+    container_name: offre-service
+    restart: always
+    ports:
+      - "8088:8088"
+    depends_on:
+      postgres-offre:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - micro-net
+
+  ats-service:
+    build:
+      context: ./Service_ATS
+      dockerfile: Dockerfile
+    container_name: ats-service
+    restart: always
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-change_this_secret_in_production}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      RABBITMQ_HOST: rabbitmq
+    ports:
+      - "8000:8000"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - micro-net
+
+  email-service:
+    build:
+      context: ./service-email
+      dockerfile: Dockerfile
+    container_name: email-service
+    restart: always
+    environment:
+      ASPNETCORE_URLS: http://+:8083
+      ASPNETCORE_ENVIRONMENT: Production
+    ports:
+      - "8083:8083"
+    depends_on:
+      postgres-email:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - micro-net
+
+  symfony-service:
+    build:
+      context: ./my_project
+      dockerfile: Dockerfile
+    container_name: symfony-service
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres-symfony:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - micro-net
+
+  # ── CONSUMER SYMFONY (RabbitMQ messenger:consume) ─────────────────────────
+  symfony-consumer:
+    build:
+      context: ./my_project
+      dockerfile: Dockerfile
+    container_name: symfony-consumer
+    restart: always
+    command: ["php", "bin/console", "messenger:consume", "rabbitmq", "--time-limit=3600", "-vv"]
+    depends_on:
+      postgres-symfony:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - micro-net
+
+  # ── FRONT Angular (Auth_Front fusionné avec front_candidate) ─────────────
+  front-service:
+    build:
+      context: ./Auth_Front
+      dockerfile: Dockerfile
+    container_name: front-service
+    restart: always
+    ports:
+      - "4200:4200"
+    networks:
+      - micro-net
+
+  # ── API GATEWAY (Nginx) ───────────────────────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    container_name: api-gateway
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - auth-service
+      - offre-service
+      - ats-service
+      - email-service
+      - symfony-service
+      - front-service
+    networks:
+      - micro-net
+
+networks:
+  micro-net:
+    driver: bridge
+
+volumes:
+  postgres-auth-data:
+  postgres-offre-data:
+  postgres-email-data:
+  postgres-symfony-data:
+  minio-data:

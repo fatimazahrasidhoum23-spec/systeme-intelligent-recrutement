@@ -1,0 +1,98 @@
+<app-navbar/>
+
+<main class="dashboard-main">
+  <!-- Header de la page -->
+   <div class="navbar-header">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <h6 class="mb-0">Espace RH</h6>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-danger text-sm px-16 py-8 radius-8 d-flex align-items-center gap-2">
+          <iconify-icon icon="lucide:power" class="icon text-xl"></iconify-icon>
+          Log Out
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  
+<div class="dashboard-main-body">
+  <div class="card basic-data-table">
+    <div class="card-header">
+      <h5 class="card-title mb-0">List Des Offres</h5>
+    </div>
+    <div class="card-body">
+      <table class="table bordered-table mb-0" id="dataTable" data-page-length='10'>
+        <thead>
+        <tr>
+          <th scope="col">
+            <div class="form-check style-check d-flex align-items-center">
+              <input class="form-check-input" type="checkbox">
+              <label class="form-check-label">
+                Id
+              </label>
+            </div>
+          </th>
+          <th scope="col">Titre</th>
+          <th scope="col">description</th>
+          <th scope="col">lieu</th>
+          <th scope="col">salaireMin</th>
+          <th scope="col">salaireMax</th>
+          <th scope="col">Status</th>
+          <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (offre of offreListeArchive; track offre.id){
+            <tr>
+              <td>
+                <div class="form-check style-check d-flex align-items-center">
+                  <input class="form-check-input" type="checkbox">
+                  <label class="form-check-label">
+                    {{offre.id}}
+                  </label>
+                </div>
+              </td>
+              <td><a href="javascript:void(0)" class="text-primary-600">{{offre.titre}} </a></td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <h6 class="text-md mb-0 fw-medium flex-grow-1">{{offre.description}}</h6>
+                </div>
+              </td>
+              <td>{{offre.lieu}}</td>
+              <td>{{offre.salaireMin | currency}}</td>
+              <td>{{offre.salaireMax}}</td>
+              <td> <span class="bg-success-focus text-success-main px-24 py-4 rounded-pill fw-medium text-sm">{{offre.status}}</span> </td>
+               <td class="text-center">
+                    <div class="d-flex align-items-center justify-content-center gap-3">
+                      <!-- Bouton Modifier -->
+                      <a 
+                      [routerLink]="['/dashboard/rh/offre/update/',offre.id]" 
+                         class="text-success-main bg-success-focus w-32-px h-32-px rounded-circle d-inline-flex align-items-center justify-content-center"
+                         title="Modifier">
+                        <iconify-icon icon="lucide:edit">
+                        </iconify-icon>
+                      </a>
+                      <!-- Bouton Supprimer -->
+                      <button 
+                         class="text-danger-main bg-danger-focus w-32-px h-32-px rounded-circle d-inline-flex align-items-center justify-content-center border-0"
+                         title="Supprimer">
+                        <iconify-icon icon="lucide:trash-2"></iconify-icon>
+                      </button>
+                    </div>
+                  </td>
+            </tr>
+
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+
+

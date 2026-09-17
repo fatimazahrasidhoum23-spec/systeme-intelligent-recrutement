@@ -1,0 +1,70 @@
+<app-rh-sidebar/>
+<main class="dashboard-main">
+  <div class="navbar-header">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto"><h6 class="mb-0">Candidats Préselectionés</h6></div>
+    </div>
+  </div>
+  <div class="dashboard-main-body">
+
+    @if (successMessage) { <div class="alert alert-success">{{ successMessage }}</div> }
+    @if (errorMessage)   { <div class="alert alert-danger">{{ errorMessage }}</div> }
+
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">
+          Candidats en attente de décision
+          <span class="badge bg-primary-100 text-primary-600 ms-2">{{ candidats.length }}</span>
+        </h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table bordered-table mb-0">
+            <thead>
+              <tr>
+                <th>Référence</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Poste</th>
+                <th>Date</th>
+                <th class="text-center">Score ATS</th>
+                <th class="text-center">Décision</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (candidats.length === 0) {
+                <tr><td colspan="7" class="text-center py-20">Aucun candidat préselectioné</td></tr>
+              }
+              @for (c of candidats; track c.id) {
+                <tr>
+                  <td><span class="text-secondary-light">{{ c.reference || '#' + c.id }}</span></td>
+                  <td><h6 class="text-md mb-0 fw-medium">{{ c.nom }}</h6></td>
+                  <td>{{ c.email }}</td>
+                  <td>{{ c.poste }}</td>
+                  <td>{{ c.date | date:'dd/MM/yyyy' }}</td>
+                  <td class="text-center">
+                    @if (c.score !== null) {
+                      <span class="badge {{ getScoreColor(c.score) }}">{{ c.score | number:'1.0-0' }}%</span>
+                    } @else {
+                      <span class="text-secondary-light">En cours...</span>
+                    }
+                  </td>
+                  <td class="text-center">
+                    <button (click)="onValider(c.id)"
+                      class="btn btn-sm btn-success-600 me-2">
+                      <iconify-icon icon="lucide:check"></iconify-icon> Valider
+                    </button>
+                    <button (click)="onEliminer(c.id)"
+                      class="btn btn-sm btn-danger-600">
+                      <iconify-icon icon="lucide:x"></iconify-icon> Éliminer
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

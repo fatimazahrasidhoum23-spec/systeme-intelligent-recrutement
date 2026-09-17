@@ -1,0 +1,120 @@
+<aside class="sidebar">
+  <div>
+    <a routerLink="/dashboard/rh" class="sidebar-logo">
+      <img src="assets/images/logo.png" alt="site logo" class="light-logo">
+      <img src="assets/images/logo-light.png" alt="site logo" class="dark-logo">
+      <img src="assets/images/logo-icon.png" alt="site logo" class="logo-icon">
+    </a>
+  </div>
+  <div class="sidebar-menu-area">
+    <ul class="sidebar-menu" id="sidebar-menu">
+      <li class="sidebar-menu-group-title">RH</li>
+      <li>
+        <a routerLink="/dashboard/rh" routerLinkActive="active-page">
+          <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+          <span>Dashboard RH</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/dashboard/rh/candidatures" routerLinkActive="active-page">
+          <iconify-icon icon="solar:document-text-outline" class="menu-icon"></iconify-icon>
+          <span>Gerer Candidatures</span>
+        </a>
+      </li>
+            <li>
+        <a routerLink="/dashboard/rh/preselectionnees" routerLinkActive="active-page">
+          <iconify-icon icon="solar:users-group-two-rounded-outline" class="menu-icon"></iconify-icon>
+          <span>Candidats préselectionés</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/profile" routerLinkActive="active-page">
+          <iconify-icon icon="solar:user-linear" class="menu-icon"></iconify-icon>
+          <span>Mon Profil</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>
+
+<main class="dashboard-main">
+  <div class="navbar-header">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <h6 class="mb-0">Espace RH</h6>
+      </div>
+      <div class="col-auto">
+        <button (click)="onLogout()" 
+                class="btn btn-danger text-sm px-16 py-8 radius-8 d-flex align-items-center gap-2">
+          <iconify-icon icon="lucide:power" class="icon text-xl"></iconify-icon>
+          Log Out
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-main-body">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+      <h6 class="fw-semibold mb-0">Dashboard RH</h6>
+    </div>
+
+    <div class="row row-cols-lg-3 row-cols-sm-2 row-cols-1 gy-4">
+      <div class="col">
+        <div class="card shadow-none border bg-gradient-start-1 h-100">
+          <a routerLink="/dashboard/rh/offre" class="card-body p-20" >
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p class="fw-medium text-primary-light mb-1">Offre</p>
+                <h6 class="mb-0">Gérer les Offres</h6>
+              </div>
+              <div class="w-50-px h-50-px bg-cyan rounded-circle d-flex justify-content-center align-items-center">
+                <iconify-icon icon="gridicons:multiple-users" class="text-white text-2xl mb-0"></iconify-icon>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      
+
+      <div class="col">
+        <div class="card shadow-none border bg-gradient-start-2 h-100">
+          <div class="card-body p-20">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p class="fw-medium text-primary-light mb-1">Entretiens</p>
+                <h6 class="mb-0">Planifier les entretiens</h6>
+              </div>
+              <div class="w-50-px h-50-px bg-purple rounded-circle d-flex justify-content-center align-items-center">
+                <iconify-icon icon="solar:calendar-outline" class="text-white text-2xl mb-0"></iconify-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card shadow-none border bg-gradient-start-3 h-100">
+          <div class="card-body p-20">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p class="fw-medium text-primary-light mb-1">Mon Profil</p>
+                <a routerLink="/profile" class="text-primary-600 fw-semibold">Voir le profil</a>
+              </div>
+              <div class="w-50-px h-50-px bg-info rounded-circle d-flex justify-content-center align-items-center">
+                <iconify-icon icon="solar:user-linear" class="text-white text-2xl mb-0"></iconify-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="d-footer">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <p class="mb-0">© 2024 Auth Service - Espace RH</p>
+      </div>
+    </div>
+  </footer>
+</main>

@@ -1,0 +1,55 @@
+<app-navbar/>
+
+<main class="dashboard-main">
+  <div class="navbar-header">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <h6 class="mb-0">Gérer Offres</h6>
+      </div>
+      <div class="col-auto"></div>
+    </div>
+  </div>
+
+  <div class="dashboard-main-body">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+      <h6 class="fw-semibold mb-0">Dashboard Offre</h6>
+    </div>
+
+    <div class="row row-cols-lg-3 row-cols-sm-2 row-cols-1 gy-4">
+      <!-- Consulter -->
+      <div class="col">
+        <div class="card shadow-none border bg-gradient-start-1 h-100">
+          <a routerLink="/dashboard/rh/offre/list"class="card-body p-20">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+               <p class="fw-medium text-primary-light mb-1">Actions</p>
+                <h6 class="mb-0">Consulter les Offres</h6>
+            </div>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Ajouter -->
+      <div class="col">
+        <div class="card shadow-none border bg-gradient-start-2 h-100">
+          <a routerLink="/dashboard/rh/offre/archive" class="card-body p-20">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p class="fw-medium text-primary-light mb-1">Actions</p>
+                <h6 class="mb-0">Consulter les offres archivees</h6>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <footer class="d-footer">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <p class="mb-0">© 2024 Auth Service - Espace RH</p>
+      </div>
+    </div>
+  </footer>
+</main>

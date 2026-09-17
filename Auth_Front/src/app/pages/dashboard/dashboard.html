@@ -1,0 +1,92 @@
+<app-navbar/>
+
+<main class="dashboard-main">
+  <div class="navbar-header">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <div class="d-flex flex-wrap align-items-center gap-4">
+          <button type="button" class="sidebar-toggle">
+            <iconify-icon icon="heroicons:bars-3-solid" class="icon text-2xl non-active"></iconify-icon>
+          </button>
+        </div>
+      </div>
+      <div class="col-auto">
+        <div class="d-flex flex-wrap align-items-center gap-3">
+          <!-- Bouton Logout -->
+          <button (click)="onLogout()" 
+                  class="btn btn-danger text-sm px-16 py-8 radius-8 d-flex align-items-center gap-2">
+            <iconify-icon icon="lucide:power" class="icon text-xl"></iconify-icon>
+            Log Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-main-body">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+      <h6 class="fw-semibold mb-0">Dashboard</h6>
+    </div>
+
+    <!-- Cards -->
+    <div class="row row-cols-lg-3 row-cols-sm-2 row-cols-1 gy-4">
+      <div class="col">
+        <div class="card shadow-none border bg-gradient-start-1 h-100">
+          <div class="card-body p-20">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p class="fw-medium text-primary-light mb-1">Bienvenue</p>
+                <h6 class="mb-0">Service Auth</h6>
+              </div>
+              <div class="w-50-px h-50-px bg-cyan rounded-circle d-flex justify-content-center align-items-center">
+                <iconify-icon icon="gridicons:multiple-users" class="text-white text-2xl mb-0"></iconify-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card shadow-none border bg-gradient-start-2 h-100">
+          <div class="card-body p-20">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p class="fw-medium text-primary-light mb-1">Mon Profil</p>
+                <a routerLink="/profile" class="text-primary-600 fw-semibold">Voir le profil</a>
+              </div>
+              <div class="w-50-px h-50-px bg-purple rounded-circle d-flex justify-content-center align-items-center">
+                <iconify-icon icon="solar:user-linear" class="text-white text-2xl mb-0"></iconify-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card shadow-none border bg-gradient-start-3 h-100">
+          <div class="card-body p-20">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p class="fw-medium text-primary-light mb-1">Déconnexion</p>
+                <button (click)="onLogout()" class="text-danger-600 fw-semibold border-0 bg-transparent">
+                  Se déconnecter
+                </button>
+              </div>
+              <div class="w-50-px h-50-px bg-info rounded-circle d-flex justify-content-center align-items-center">
+                <iconify-icon icon="lucide:power" class="text-white text-2xl mb-0"></iconify-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="d-footer">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <p class="mb-0">© 2024 Auth Service. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+</main>

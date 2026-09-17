@@ -1,0 +1,206 @@
+<!-- =====================================================================
+     EmailLogsComponent — WowDash
+     GET http://localhost:5292/api/Email/logs
+     ===================================================================== -->
+
+<div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2 mb-4">
+  <div>
+    <nav>
+      <ol class="breadcrumb mb-1">
+        <li class="breadcrumb-item"><a href="javascript:void(0);">Tableau de Bord</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Logs Emails</li>
+      </ol>
+    </nav>
+    <h1 class="page-title fw-medium fs-18 mb-0">Historique des Emails Envoyés</h1>
+  </div>
+</div>
+
+<!-- Filtres CLIENT-SIDE (le backend ne supporte pas la pagination) -->
+<div class="row mb-3">
+  <div class="col-xl-12">
+    <div class="card custom-card">
+      <div class="card-body">
+        <div class="row g-3 align-items-end">
+
+          <div class="col-md-4">
+            <label class="form-label">Recherche (destinataire / sujet)</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="ex: candidat@test.com"
+              [(ngModel)]="search"
+            />
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Type</label>
+            <select class="form-select" [(ngModel)]="filterType">
+              <option value="">Tous</option>
+              <option value="0">Postulation</option>
+              <option value="1">Entretien</option>
+              <option value="2">Admission</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Statut</label>
+            <select class="form-select" [(ngModel)]="filterStatus">
+              <option value="">Tous</option>
+              <option value="0">En attente</option>
+              <option value="1">Envoyé</option>
+              <option value="2">Échoué</option>
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <button class="btn btn-secondary w-100" (click)="resetFilters()">
+              <i class="ri-refresh-line me-1"></i>Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tableau -->
+<div class="row">
+  <div class="col-xl-12">
+    <div class="card custom-card">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <div class="card-title">
+          Logs Emails
+          <span class="badge bg-primary ms-2">{{ filteredLogs.length }} / {{ logs.length }}</span>
+        </div>
+        <button class="btn btn-sm btn-light-primary" (click)="loadLogs()">
+          <i class="ri-refresh-line me-1"></i>Actualiser
+        </button>
+      </div>
+
+      <div class="card-body p-0">
+
+        <div class="text-center py-5" *ngIf="isLoading">
+          <div class="spinner-border text-primary"></div>
+        </div>
+
+        <div class="alert alert-danger m-3" *ngIf="errorMessage">
+          <i class="ri-error-warning-line me-2"></i>{{ errorMessage }}
+        </div>
+
+        <div class="table-responsive" *ngIf="!isLoading && !errorMessage">
+          <table class="table table-hover text-nowrap table-bordered mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Destinataire</th>
+                <th>Sujet</th>
+                <th>Type</th>
+                <th>Statut</th>
+                <th>Date d'envoi</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let log of filteredLogs">
+                <td>{{ log.id }}</td>
+                <td><span class="fw-medium">{{ log.destinataire }}</span></td>
+                <td>
+                  <span class="text-truncate d-block" style="max-width:220px;" [title]="log.sujet">
+                    {{ log.sujet }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge" [ngClass]="log.type | emailTypeBadge">
+                    {{ log.type | emailTypeLabel }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge" [ngClass]="log.statut | emailStatusBadge">
+                    {{ log.statut | emailStatusLabel }}
+                  </span>
+                </td>
+                <td>{{ log.dateEnvoi | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-icon btn-light-primary"
+                    title="Voir détails"
+                    (click)="viewDetail(log)"
+                    data-bs-toggle="modal"
+                    data-bs-target="#logDetailModal">
+                    <i class="ri-eye-line"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="filteredLogs.length === 0">
+                <td colspan="7" class="text-center py-4 text-muted">
+                  <i class="ri-mail-line fs-2 d-block mb-2"></i>
+                  Aucun log trouvé.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Détail -->
+<div class="modal fade" id="logDetailModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" *ngIf="selectedLog">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="ri-mail-open-line me-2"></i>Détail Email #{{ selectedLog.id }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="fw-semibold text-muted fs-12">Destinataire</label>
+            <p class="mb-0">{{ selectedLog.destinataire }}</p>
+          </div>
+          <div class="col-md-6">
+            <label class="fw-semibold text-muted fs-12">Type</label>
+            <p class="mb-0">
+              <span class="badge" [ngClass]="selectedLog.type | emailTypeBadge">
+                {{ selectedLog.type | emailTypeLabel }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-12">
+            <label class="fw-semibold text-muted fs-12">Sujet</label>
+            <p class="mb-0">{{ selectedLog.sujet }}</p>
+          </div>
+          <div class="col-md-6">
+            <label class="fw-semibold text-muted fs-12">Statut</label>
+            <p class="mb-0">
+              <span class="badge" [ngClass]="selectedLog.statut | emailStatusBadge">
+                {{ selectedLog.statut | emailStatusLabel }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <label class="fw-semibold text-muted fs-12">Date d'envoi</label>
+            <p class="mb-0">{{ selectedLog.dateEnvoi | date:'dd/MM/yyyy à HH:mm:ss' }}</p>
+          </div>
+          <div class="col-md-12" *ngIf="selectedLog.messageErreur">
+            <label class="fw-semibold text-danger fs-12">Erreur</label>
+            <div class="alert alert-danger py-2 mb-0">{{ selectedLog.messageErreur }}</div>
+          </div>
+          <div class="col-md-12">
+            <label class="fw-semibold text-muted fs-12">Corps du message</label>
+            <div class="border rounded p-3 bg-light" style="max-height:250px;overflow:auto;">
+              <pre class="mb-0 fs-13" style="white-space:pre-wrap;">{{ selectedLog.corps }}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,165 @@
+﻿<div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2 mb-4">
+  <div>
+    <nav>
+      <ol class="breadcrumb mb-1">
+        <li class="breadcrumb-item"><a routerLink="/email/dashboard">Tableau de Bord</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Test Email</li>
+      </ol>
+    </nav>
+    <h1 class="page-title fw-medium fs-18 mb-0">Tester l envoi d un Email</h1>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-xl-8">
+
+    <div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="successMessage">
+      <i class="ri-check-double-line me-2"></i>
+      <strong>Succes !</strong> {{ successMessage }}
+      <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+    </div>
+
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="errorMessage">
+      <i class="ri-error-warning-line me-2"></i>
+      <strong>Erreur !</strong> {{ errorMessage }}
+      <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+    </div>
+
+    <div class="card custom-card">
+      <div class="card-header">
+        <div class="card-title">
+          <i class="ri-send-plane-line me-2 text-primary"></i>
+          Formulaire d envoi
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="row g-3">
+
+          <div class="col-md-12">
+            <label class="form-label fw-semibold">
+              Email destinataire <span class="text-danger">*</span>
+            </label>
+            <input
+              type="email"
+              class="form-control"
+              placeholder="exemple@domaine.com"
+              [(ngModel)]="form.destinataire"
+              [class.is-invalid]="form.destinataire && !isEmailValid(form.destinataire)"
+              [class.is-valid]="form.destinataire && isEmailValid(form.destinataire)"
+            />
+            <div class="invalid-feedback">
+              Format invalide. Lemail doit suivre le format : <code>nom&#64;domaine.com</code>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Nom du candidat <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Saisir le nom complet"
+              [(ngModel)]="form.nomCandidat"
+              [class.is-invalid]="submitted && !form.nomCandidat"
+            />
+            <div class="invalid-feedback">Le nom est obligatoire.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              Poste <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Saisir le poste concerne"
+              [(ngModel)]="form.poste"
+              [class.is-invalid]="submitted && !form.poste"
+            />
+            <div class="invalid-feedback">Le poste est obligatoire.</div>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label fw-semibold">
+              Type d evenement <span class="text-danger">*</span>
+            </label>
+            <div class="d-flex gap-3 flex-wrap">
+              <div class="form-check">
+                <input
+                  class="form-check-input" type="radio" id="typePostulation"
+                  [(ngModel)]="form.typeEvenement" value="postulation" />
+                <label class="form-check-label" for="typePostulation">
+                  <span class="badge bg-primary">Postulation</span>
+                  <small class="text-muted ms-1">Confirmation candidature</small>
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input" type="radio" id="typeEntretien"
+                  [(ngModel)]="form.typeEvenement" value="entretien" />
+                <label class="form-check-label" for="typeEntretien">
+                  <span class="badge bg-warning text-dark">Entretien</span>
+                  <small class="text-muted ms-1">Convocation</small>
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input" type="radio" id="typeAdmission"
+                  [(ngModel)]="form.typeEvenement" value="admission" />
+                <label class="form-check-label" for="typeAdmission">
+                  <span class="badge bg-success">Admission</span>
+                  <small class="text-muted ms-1">Decision finale</small>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <ng-container *ngIf="form.typeEvenement === 'entretien'">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Date de l entretien <span class="text-danger">*</span>
+              </label>
+              <input
+                type="datetime-local"
+                class="form-control"
+                [(ngModel)]="form.dateEntretien"
+                [min]="minDate"
+                [class.is-invalid]="submitted && (!form.dateEntretien || !isDateInFuture(form.dateEntretien))"
+              />
+              <div class="invalid-feedback">
+                La date doit etre superieure ou egale a maintenant.
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                Lieu de l entretien <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Saisir le lieu"
+                [(ngModel)]="form.lieuEntretien"
+                [class.is-invalid]="submitted && !form.lieuEntretien"
+              />
+              <div class="invalid-feedback">Le lieu est obligatoire.</div>
+            </div>
+          </ng-container>
+
+          <div class="col-md-12 d-flex gap-2">
+            <button class="btn btn-primary" [disabled]="isSending" (click)="send()">
+              <span *ngIf="isSending" class="spinner-border spinner-border-sm me-1"></span>
+              <i class="ri-send-plane-fill me-1" *ngIf="!isSending"></i>
+              {{ isSending ? 'Envoi en cours...' : 'Envoyer le test' }}
+            </button>
+            <button class="btn btn-light" (click)="reset()" [disabled]="isSending">
+              <i class="ri-refresh-line me-1"></i>Reinitialiser
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

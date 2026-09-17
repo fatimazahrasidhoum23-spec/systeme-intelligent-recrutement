@@ -1,0 +1,275 @@
+<app-navbar/>
+
+<main class="dashboard-main">
+  <div class="navbar-header">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto"><h6 class="mb-0">Espace Candidat</h6></div>
+      <div class="col-auto">
+        <button (click)="onLogout()" class="btn btn-danger text-sm px-16 py-8 radius-8 d-flex align-items-center gap-2">
+          <iconify-icon icon="lucide:power" class="icon text-xl"></iconify-icon> Log Out
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-main-body">
+
+    @if (successMessage) { <div class="alert alert-success mb-16">{{ successMessage }}</div> }
+    @if (errorMessage) { <div class="alert alert-danger mb-16">{{ errorMessage }}</div> }
+
+    <!-- Cartes rapides -->
+    <div class="row row-cols-lg-3 row-cols-sm-2 row-cols-1 gy-4 mb-24">
+      <div class="col">
+        <div class="card shadow-none border bg-gradient-start-1 h-100">
+          <div class="card-body p-20">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p class="fw-medium text-primary-light mb-1">Candidatures</p>
+                <h6 class="mb-0">{{ candidatures.length }} candidature(s)</h6>
+              </div>
+              <div class="w-50-px h-50-px bg-cyan rounded-circle d-flex justify-content-center align-items-center">
+                <iconify-icon icon="gridicons:multiple-users" class="text-white text-2xl mb-0"></iconify-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-none border bg-gradient-start-2 h-100">
+          <div class="card-body p-20">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p class="fw-medium text-primary-light mb-1">Documents</p>
+                <h6 class="mb-0">{{ documents.length }} document(s)</h6>
+              </div>
+              <div class="w-50-px h-50-px bg-purple rounded-circle d-flex justify-content-center align-items-center">
+                <iconify-icon icon="lucide:file-text" class="text-white text-2xl mb-0"></iconify-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card shadow-none border bg-gradient-start-3 h-100">
+          <div class="card-body p-20">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+              <div>
+                <p class="fw-medium text-primary-light mb-1">Offres</p>
+                <h6 class="mb-0">{{ offres.length }} offre(s) disponible(s)</h6>
+              </div>
+              <div class="w-50-px h-50-px bg-info rounded-circle d-flex justify-content-center align-items-center">
+                <iconify-icon icon="lucide:briefcase" class="text-white text-2xl mb-0"></iconify-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Document -->
+    <div class="card border-0 shadow-sm radius-12 mb-24">
+      <div class="card-header bg-white border-bottom-0 py-3">
+        <h5 class="card-title mb-0">Ajouter un document (CV, Lettre...)</h5>
+      </div>
+      <div class="card-body">
+        <div class="row gy-3 align-items-end">
+          <div class="col-md-3">
+            <label class="form-label">Type</label>
+            <select class="form-select" [(ngModel)]="selectedType">
+              <option value="CV">CV</option>
+              <option value="LETTRE_MOTIVATION">Lettre de motivation</option>
+              <option value="DIPLOME">Diplome</option>
+              <option value="AUTRE">Autre</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Fichier (PDF, Word, image)</label>
+            <input type="file" class="form-control" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx,.jpg,.png">
+          </div>
+          <div class="col-md-3">
+            @if (uploading) { <span class="text-primary">Upload en cours...</span> }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mes Documents -->
+    @if (documents.length > 0) {
+    <div class="card border-0 shadow-sm radius-12 mb-24">
+      <div class="card-header bg-white border-bottom-0 py-3">
+        <h5 class="card-title mb-0">Mes Documents</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table bordered-table mb-0">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Type</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (doc of documents; track doc.id) {
+              <tr>
+                <td>{{ doc.nomFichier }}</td>
+                <td><span class="badge bg-primary-100 text-primary-600">{{ doc.typeDocument }}</span></td>
+                <td class="text-center">
+                  <a [href]="doc.url" target="_blank" class="btn btn-sm btn-outline-primary me-2">Voir</a>
+                  <button (click)="onDeleteDoc(doc.id)" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Offres -->
+    <div class="card border-0 shadow-sm radius-12 mb-24">
+      <div class="card-header bg-white border-bottom-0 py-3">
+        <h5 class="card-title mb-0">Offres d'Emploi Disponibles</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table bordered-table mb-0">
+            <thead>
+              <tr>
+                <th class="ps-24">Id</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Lieu</th>
+                <th>Salaire Min</th>
+                <th>Salaire Max</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (offre of offres; track offre.id) {
+              <tr>
+                <td class="ps-24"><span class="text-secondary-light fw-medium">{{ offre.id }}</span></td>
+                <td><h6 class="text-md mb-0 fw-medium text-primary-600">{{ offre.titre }}</h6></td>
+                <td><span class="text-sm text-secondary-light">{{ offre.description }}</span></td>
+                <td>{{ offre.lieu }}</td>
+                <td class="fw-semibold text-dark">{{ offre.salaireMin }}&#8364;</td>
+                <td class="fw-semibold text-dark">{{ offre.salaireMax }}&#8364;</td>
+                <td class="text-center">
+                  <button (click)="openPostulerModal(offre)" class="btn btn-primary-600 radius-8 px-16 py-8 d-inline-flex align-items-center gap-2 border-0">
+                    <iconify-icon icon="lucide:send" class="text-lg"></iconify-icon> Postuler
+                  </button>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mes Candidatures -->
+    @if (candidatures.length > 0) {
+    <div class="card border-0 shadow-sm radius-12">
+      <div class="card-header bg-white border-bottom-0 py-3">
+        <h5 class="card-title mb-0">Mes Candidatures</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table bordered-table mb-0">
+            <thead>
+              <tr>
+                <th>Ref</th>
+                <th>Poste</th>
+                <th>Statut</th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (c of candidatures; track c.id) {
+              <tr>
+                <td>#{{ c.id }}</td>
+                <td>{{ c.poste }}</td>
+                <td>
+                  <span class="badge"
+                    [class.bg-warning-100]="c.statut === 'EN_ATTENTE'" [class.text-warning-600]="c.statut === 'EN_ATTENTE'"
+                    [class.bg-success-100]="c.statut === 'ACCEPTEE'" [class.text-success-600]="c.statut === 'ACCEPTEE'"
+                    [class.bg-danger-100]="c.statut === 'REFUSEE'" [class.text-danger-600]="c.statut === 'REFUSEE'">
+                    {{ c.statut }}
+                  </span>
+                </td>
+                <td class="text-center">
+                  <button (click)="onDeleteCandidature(c.id)" class="btn btn-sm btn-outline-danger">
+                    <iconify-icon icon="lucide:trash-2"></iconify-icon> Supprimer
+                  </button>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    }
+
+  </div>
+
+  <footer class="d-footer">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto"><p class="mb-0">&copy; 2024 Portails Candidats - EHEI</p></div>
+    </div>
+  </footer>
+</main>
+
+<!-- Modale de Postulation -->
+@if (showPostulerModal) {
+<div class="modal-overlay" (click)="closeModal()" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:center;justify-content:center;">
+  <div class="modal-content card border-0 shadow-lg radius-12" (click)="$event.stopPropagation()" style="max-width:550px;width:90%;background:white;">
+    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0">Confirmer votre candidature</h5>
+      <button (click)="closeModal()" class="btn btn-sm btn-outline-secondary">&times;</button>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-info mb-3">
+        <strong>Offre : </strong>{{ selectedOffre?.titre }}<br>
+        <strong>Lieu : </strong>{{ selectedOffre?.lieu }}<br>
+        <strong>Salaire : </strong>{{ selectedOffre?.salaireMin }}&#8364; - {{ selectedOffre?.salaireMax }}&#8364;
+      </div>
+
+      <h6 class="mb-3">Vos informations</h6>
+      <div class="mb-3">
+        <label class="form-label">Nom</label>
+        <input type="text" class="form-control" [value]="candidatInfo.nom" readonly>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" [value]="candidatInfo.email" readonly>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Poste</label>
+        <input type="text" class="form-control" [value]="candidatInfo.poste" readonly>
+      </div>
+
+      <h6 class="mb-3 mt-4">Document a joindre</h6>
+      <div class="mb-3">
+        <label class="form-label">Choisir votre CV</label>
+        <select class="form-select" [(ngModel)]="selectedDocId">
+          <option [ngValue]="null">-- Aucun document --</option>
+          @for (doc of documents; track doc.id) {
+            <option [ngValue]="doc.id">{{ doc.typeDocument }} - {{ doc.nomFichier }}</option>
+          }
+        </select>
+        @if (documents.length === 0) {
+          <small class="text-danger">Aucun document uploade. Uploadez d'abord un CV ci-dessus.</small>
+        }
+      </div>
+    </div>
+    <div class="card-footer bg-white border-top d-flex justify-content-end gap-2 py-3">
+      <button (click)="closeModal()" class="btn btn-outline-secondary">Annuler</button>
+      <button (click)="confirmerPostulation()" class="btn btn-primary-600">
+        <iconify-icon icon="lucide:send" class="me-1"></iconify-icon> Envoyer ma candidature
+      </button>
+    </div>
+  </div>
+</div>
+}

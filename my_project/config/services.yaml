@@ -1,0 +1,15 @@
+parameters:
+    jwt_secret: '%env(JWT_SECRET)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+
+    # Injecter la clé JWT dans l'authenticator
+    App\Security\JwtAuthenticator:
+        arguments:
+            $jwtSecret: '%jwt_secret%'

@@ -1,0 +1,44 @@
+<aside class="sidebar">
+  <div>
+    <a routerLink="/dashboard/rh" class="sidebar-logo">
+      <img src="assets/images/logo.png" alt="SIR" class="light-logo">
+      <img src="assets/images/logo-light.png" alt="SIR" class="dark-logo">
+      <img src="assets/images/logo-icon.png" alt="SIR" class="logo-icon">
+    </a>
+  </div>
+  <div class="sidebar-menu-area">
+    <ul class="sidebar-menu" id="sidebar-menu">
+      <li class="sidebar-menu-group-title">RH</li>
+      <li>
+        <a routerLink="/dashboard/rh" routerLinkActive="active-page" [routerLinkActiveOptions]="{exact:true}">
+          <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+          <span>Dashboard RH</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/dashboard/rh/offre/list" routerLinkActive="active-page">
+          <iconify-icon icon="solar:bag-4-outline" class="menu-icon"></iconify-icon>
+          <span>Gérer les Offres</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/dashboard/rh/candidatures" routerLinkActive="active-page">
+          <iconify-icon icon="solar:document-text-outline" class="menu-icon"></iconify-icon>
+          <span>Gérer Candidatures</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/dashboard/rh/preselectionnees" routerLinkActive="active-page">
+          <iconify-icon icon="solar:users-group-two-rounded-outline" class="menu-icon"></iconify-icon>
+          <span>Candidats préselectionés</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/profile" routerLinkActive="active-page">
+          <iconify-icon icon="solar:user-linear" class="menu-icon"></iconify-icon>
+          <span>Mon Profil</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>

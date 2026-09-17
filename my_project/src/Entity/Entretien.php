@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\Doctrine\EntretienRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: EntretienRepository::class)]
+#[ORM\Table(name: 'entretiens')]
+class Entretien
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    private \DateTimeImmutable $dateHeure;
+
+    #[ORM\Column(length: 50)]
+    private string $statut = 'planifie';
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $lien = null;
+
+    #[ORM\Column(length: 100)]
+    private string $candidatId;
+
+    public function getId(): ?int { return $this->id; }
+
+    public function getDateHeure(): \DateTimeImmutable { return $this->dateHeure; }
+    public function setDateHeure(\DateTimeImmutable $d): static { $this->dateHeure = $d; return $this; }
+
+    public function getStatut(): string { return $this->statut; }
+    public function setStatut(string $s): static { $this->statut = $s; return $this; }
+
+    public function getLien(): ?string { return $this->lien; }
+    public function setLien(?string $l): static { $this->lien = $l; return $this; }
+
+    public function getCandidatId(): string { return $this->candidatId; }
+    public function setCandidatId(string $c): static { $this->candidatId = $c; return $this; }
+}

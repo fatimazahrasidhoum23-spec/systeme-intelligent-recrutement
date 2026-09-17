@@ -1,0 +1,65 @@
+<app-rh-sidebar/>
+
+<main class="dashboard-main">
+  <div class="navbar-header">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto"><h6 class="mb-0">Ajouter une Offre</h6></div>
+    </div>
+  </div>
+
+  <div class="dashboard-main-body">
+    <div class="card border-0 shadow-sm radius-12">
+      <div class="card-header bg-white border-bottom-0 py-3">
+        <h5 class="card-title mb-0">Nouvelle Offre d'Emploi</h5>
+      </div>
+      <div class="card-body">
+        @if (successMessage) {
+          <div class="alert alert-success">{{ successMessage }}</div>
+        }
+        @if (errorMessage) {
+          <div class="alert alert-danger">{{ errorMessage }}</div>
+        }
+        <form class="row gy-3" (ngSubmit)="OnAdd()" [formGroup]="formGroup">
+          <div class="col-md-6">
+            <label class="form-label">Titre *</label>
+            <input type="text" formControlName="titre" class="form-control" placeholder="Titre du poste">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Description *</label>
+            <input type="text" formControlName="description" class="form-control" placeholder="Description du poste">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Salaire Min</label>
+            <input type="number" formControlName="salaireMin" class="form-control" placeholder="0">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Salaire Max</label>
+            <input type="number" formControlName="salaireMax" class="form-control" placeholder="0">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Lieu *</label>
+            <input type="text" formControlName="lieu" class="form-control" placeholder="Ville, Pays">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Statut *</label>
+            <select class="form-select" formControlName="status">
+              <option value="" disabled>Choisir un statut...</option>
+              <option value="Encours">En cours</option>
+              <option value="Accepter">Acceptée</option>
+              <option value="Archiver">Archivée</option>
+              <option value="Expirer">Expirée</option>
+            </select>
+          </div>
+          @if (formGroup.errors?.['salaireIncoherent']) {
+            <p class="text-danger small">Le salaire max doit être supérieur au minimum.</p>
+          }
+          <div class="col-md-12">
+            <button class="btn btn-primary-600" type="submit" [disabled]="formGroup.invalid">
+              Ajouter l'offre
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>

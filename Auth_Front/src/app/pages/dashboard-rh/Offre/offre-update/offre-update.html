@@ -1,0 +1,109 @@
+
+<div class="row gy-4">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Input Status</h5>
+      </div>
+      <div class="card-body">
+        <form class="row gy-3 needs-validation" (ngSubmit)="onUpdate()"  [formGroup]="formGroup">
+          <div class="col-md-6">
+            <label class="form-label">Identifiant (ID)</label>
+            <div class="icon-field has-validation">
+              <span class="icon">
+                <span icon="f7:lock"></span> </span>
+              <input type="text" name="id" formControlName="id" class="form-control" readonly style="background-color: #f8f9fa; cursor: not-allowed;">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Titre</label>
+            <div class="icon-field has-validation">
+                  <span class="icon">
+                    <span icon="f7:person"></span>
+                  </span>
+              <input type="text" name="#0" formControlName="titre" class="form-control" placeholder="Enter Titre" required>
+              <div class="invalid-feedback">
+                Please provide titre
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Description</label>
+            <div class="icon-field has-validation">
+                  <span class="icon">
+                    <span icon="f7:person"></span>
+                  </span>
+              <input type="text" name="#0" formControlName="description" class="form-control" placeholder="Enter Description" required>
+              <div class="invalid-feedback">
+                Please provide Description
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Salaire Min</label>
+            <div class="icon-field has-validation">
+                  <span class="icon">
+                    <span icon="solar:phone-calling-linear"></span>
+                  </span>
+              <input type="number" name="#0" formControlName="salaireMin" class="form-control" placeholder="$100" required>
+              <div class="invalid-feedback">
+                Please provide salaire Min
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Salaire Max</label>
+            <div class="icon-field has-validation">
+                  <span class="icon">
+                    <span icon="solar:lock-password-outline"></span>
+                  </span>
+              <input type="number" name="#0" formControlName="salaireMax" class="form-control" placeholder="$500" required>
+              <div class="invalid-feedback">
+                Please provide Salaire MAx
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">lieu</label>
+            <div class="icon-field has-validation">
+                  <span class="icon">
+                    <span icon="mage:email"></span>
+                  </span>
+              <input type="text" name="#0" formControlName="lieu" class="form-control" placeholder="Enter Lieu" required>
+              <div class="invalid-feedback">
+                Please provide Lieu
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Statut de l'offre</label>
+            <div class="icon-field has-validation">
+              <span class="icon">
+                <span icon="solar:checklist-minimalistic-outline"></span>
+              </span>
+              <select class="form-select" formControlName="status" name="status" required>
+                <option value="" selected disabled>Choisir un statut...</option>
+                <option [value]="'0'">En cours</option>
+                <option [value]="'1'">Accepter</option>
+                <option [value]="'2'">Archiver</option>
+                <option [value]="'3'">Expirer</option>
+              </select>
+              <div class="invalid-feedback">
+                Veuillez sélectionner un statut valide.
+              </div>
+            </div>
+          </div>
+          @if (formGroup.errors?.['salaireIncoherent'] && formGroup.get('salaireMax')?.touched) {
+            <p style="color: red; font-size: 0.8rem;">
+              Le salaire maximum doit être strictement supérieur au minimum.
+            </p>
+          }
+          <div class="col-md-12">
+            <button class="btn btn-primary-600"  type="submit" [disabled]="formGroup.invalid">Submit form</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

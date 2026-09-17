@@ -1,0 +1,57 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres-offre:5432/offreRh
+    username: username
+    password: password123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: mail-dev
+    port: 1025
+    username: ali
+    password: ali
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enabled: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+  docker:
+    compose:
+      enabled: false
+
+app:
+  jwt:
+    secret: THIS_IS_MY_SUPER_SECRET_KEY_2026_AUTH_SERVICE_SECURE_123456789
+
+minio:
+  url: http://minio:9000
+  access-key: admin
+  secret-key: password
+  bucket: documents
+
+application:
+  file:
+    uploads:
+      photos-output-path: ./uploads
+
+server:
+  port: 8088

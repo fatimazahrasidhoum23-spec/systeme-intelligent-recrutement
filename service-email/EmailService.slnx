@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Éléments de solution/">
+    <File Path="docker-compose.yml" />
+  </Folder>
+  <Project Path="EmailService.API/EmailService.API.csproj" />
+  <Project Path="EmailService.Application/EmailService.Application.csproj" />
+  <Project Path="EmailService.Domain/EmailService.Domain.csproj" />
+  <Project Path="EmailService.Infrastructure/EmailService.Infrastructure.csproj" />
+</Solution>

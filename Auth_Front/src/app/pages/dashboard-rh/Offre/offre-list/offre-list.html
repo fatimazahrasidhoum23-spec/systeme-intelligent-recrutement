@@ -1,0 +1,100 @@
+<app-rh-sidebar/>
+
+<main class="dashboard-main">
+  <!-- Header de la page -->
+  <div class="navbar-header">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <h6 class="mb-0">Espace RH</h6>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-danger text-sm px-16 py-8 radius-8 d-flex align-items-center gap-2">
+          <iconify-icon icon="lucide:power" class="icon text-xl"></iconify-icon>
+          Log Out
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="dashboard-main-body">
+    <!-- Le bloc @if garantit qu'Angular attend les données avant de dessiner le tableau -->
+      <div class="card border-0 shadow-sm radius-12">
+        <div class="card-header bg-white border-bottom-0 py-3 d-flex align-items-center justify-content-between">
+          <h5 class="card-title mb-0">Liste Des Offres</h5>
+          <a routerLink="/dashboard/rh/offre/Add" class="btn btn-primary-600 radius-8 px-20 py-11 d-flex align-items-center gap-2">
+            <iconify-icon icon="lucide:plus-circle" class="text-xl"></iconify-icon> 
+            Nouvelle Offre
+          </a>
+        </div>
+        
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table bordered-table mb-0">
+              <thead>
+                <tr>
+                  <th scope="col" class="ps-24">Id</th>
+                  <th scope="col">Titre</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Lieu</th>
+                  <th scope="col">Salaire Min</th>
+                  <th scope="col">Salaire Max</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (offre of offreslIST; track offre.id) {
+                <tr>
+                  <td class="ps-24">
+                    <span class="text-secondary-light fw-medium">{{offre.id}}</span>
+                  </td>
+                  <td>
+                    <h6 class="text-md mb-0 fw-medium text-primary-600">{{offre.titre}}</h6>
+                  </td>
+     
+                  <td>
+                    <span class="text-sm text-secondary-light">{{offre.description}}</span>
+                  </td>
+                  <td>{{offre.lieu}}</td>
+                  <td class="fw-semibold text-dark">{{offre.salaireMin | currency:'EUR'}}</td>
+                  <td class="fw-semibold text-dark">{{offre.salaireMax}}€</td>
+                  <td>
+                    <span class="bg-success-focus text-success-main px-16 py-4 rounded-pill fw-medium text-sm">
+                      {{offre.status}}
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    <div class="d-flex align-items-center justify-content-center gap-3">
+                      <a 
+                      [routerLink]="['/dashboard/rh/offre/update/',offre.id]" 
+                         class="text-success-main bg-success-focus w-32-px h-32-px rounded-circle d-inline-flex align-items-center justify-content-center"
+                         title="Modifier">
+                        <iconify-icon icon="lucide:edit">
+                        </iconify-icon>
+                      </a>
+                      <button (click)="onDelete(offre.id)"
+                         class="text-danger-main bg-danger-focus w-32-px h-32-px rounded-circle d-inline-flex align-items-center justify-content-center border-0"
+                         title="Supprimer">
+                        <iconify-icon icon="lucide:trash-2"></iconify-icon>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    
+  </div>
+
+  <footer class="d-footer">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <p class="mb-0">© 2024 Auth Service - Espace RH</p>
+      </div>
+    </div>
+  </footer>
+</main>

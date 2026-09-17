@@ -1,0 +1,116 @@
+<aside class="sidebar">
+  <div>
+    <a routerLink="/dashboard" class="sidebar-logo">
+      <img src="assets/images/logo.png" alt="site logo" class="light-logo">
+      <img src="assets/images/logo-light.png" alt="site logo" class="dark-logo">
+      <img src="assets/images/logo-icon.png" alt="site logo" class="logo-icon">
+    </a>
+  </div>
+  <div class="sidebar-menu-area">
+    <ul class="sidebar-menu" id="sidebar-menu">
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="active-page">
+          <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/profile" routerLinkActive="active-page">
+          <iconify-icon icon="solar:user-linear" class="menu-icon"></iconify-icon>
+          <span>Mon Profil</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>
+
+<main class="dashboard-main">
+  <div class="navbar-header">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <div class="d-flex flex-wrap align-items-center gap-4">
+          <button type="button" class="sidebar-toggle">
+            <iconify-icon icon="heroicons:bars-3-solid" class="icon text-2xl non-active"></iconify-icon>
+          </button>
+        </div>
+      </div>
+      <div class="col-auto">
+        <button (click)="onLogout()" 
+                class="btn btn-danger text-sm px-16 py-8 radius-8 d-flex align-items-center gap-2">
+          <iconify-icon icon="lucide:power" class="icon text-xl"></iconify-icon>
+          Log Out
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-main-body">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
+      <h6 class="fw-semibold mb-0">Mon Profil</h6>
+      <ul class="d-flex align-items-center gap-2">
+        <li class="fw-medium">
+          <a routerLink="/dashboard" class="d-flex align-items-center gap-1 hover-text-primary">
+            <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
+            Dashboard
+          </a>
+        </li>
+        <li>-</li>
+        <li class="fw-medium">Mon Profil</li>
+      </ul>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="text-center py-40">
+      <p>Chargement...</p>
+    </div>
+
+    <!-- Erreur -->
+    <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+    <!-- Profil -->
+    <div *ngIf="user && !isLoading" class="row gy-4">
+      <div class="col-lg-4">
+        <div class="user-grid-card position-relative border radius-16 overflow-hidden bg-base h-100">
+          <img src="assets/images/logo.png" style="background:#0F1C2E;padding:20px;" alt="" class="w-100 object-fit-cover">
+          <div class="pb-24 ms-16 mb-24 me-16 mt--100">
+            <div class="text-center border border-top-0 border-start-0 border-end-0">
+              <img src="assets/images/logo-icon.png" alt="" 
+                   class="border br-white border-width-2-px w-200-px h-200-px rounded-circle object-fit-cover">
+              <h6 class="mb-0 mt-16">{{ user.nom }} {{ user.prenom }}</h6>
+              <span class="text-secondary-light mb-16">{{ user.email }}</span>
+            </div>
+            <div class="mt-24">
+              <h6 class="text-xl mb-16">Informations Personnelles</h6>
+              <ul>
+                <li class="d-flex align-items-center gap-1 mb-12">
+                  <span class="w-30 text-md fw-semibold text-primary-light">Nom</span>
+                  <span class="w-70 text-secondary-light fw-medium">: {{ user.nom }}</span>
+                </li>
+                <li class="d-flex align-items-center gap-1 mb-12">
+                  <span class="w-30 text-md fw-semibold text-primary-light">Prénom</span>
+                  <span class="w-70 text-secondary-light fw-medium">: {{ user.prenom }}</span>
+                </li>
+                <li class="d-flex align-items-center gap-1 mb-12">
+                  <span class="w-30 text-md fw-semibold text-primary-light">Email</span>
+                  <span class="w-70 text-secondary-light fw-medium">: {{ user.email }}</span>
+                </li>
+                <li class="d-flex align-items-center gap-1 mb-12">
+                  <span class="w-30 text-md fw-semibold text-primary-light">Rôle</span>
+                  <span class="w-70 text-secondary-light fw-medium">: {{ user.role }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="d-footer">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto">
+        <p class="mb-0">© 2024 Auth Service. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+</main>

@@ -1,0 +1,96 @@
+<section class="auth bg-base d-flex flex-wrap">  
+    <div class="auth-left d-lg-block d-none">
+        <div class="d-flex align-items-center flex-column h-100 justify-content-center">
+            <img src="assets/images/logo.png" style="max-width:400px;padding:40px;background:#0F1C2E;width:100%;height:100%;object-fit:contain;" alt="">
+        </div>
+    </div>
+    <div class="auth-right py-32 px-24 d-flex flex-column justify-content-center">
+        <div class="max-w-464-px mx-auto w-100">
+            <div>
+                <a href="/" class="mb-40 max-w-290-px">
+                    <img src="assets/images/logo.png" alt="">
+                </a>
+                <h4 class="mb-12">Sign Up to your Account</h4>
+                <p class="mb-32 text-secondary-light text-lg">Welcome! please enter your details</p>
+            </div>
+
+            <!-- Message d'erreur -->
+            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+            <!-- Message de succès -->
+            <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+            <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+                <div class="icon-field mb-16">
+                    <span class="icon top-50 translate-middle-y">
+                        <iconify-icon icon="f7:person"></iconify-icon>
+                    </span>
+                    <input type="text" 
+                           class="form-control h-56-px bg-neutral-50 radius-12" 
+                           placeholder="Nom"
+                           [(ngModel)]="nom"
+                           name="nom"
+                           required>
+                </div>
+                <div class="icon-field mb-16">
+                    <span class="icon top-50 translate-middle-y">
+                        <iconify-icon icon="f7:person"></iconify-icon>
+                    </span>
+                    <input type="text" 
+                           class="form-control h-56-px bg-neutral-50 radius-12" 
+                           placeholder="Prénom"
+                           [(ngModel)]="prenom"
+                           name="prenom"
+                           required>
+                </div>
+                <div class="icon-field mb-16">
+                    <span class="icon top-50 translate-middle-y">
+                        <iconify-icon icon="mage:email"></iconify-icon>
+                    </span>
+                    <input type="email" 
+                           class="form-control h-56-px bg-neutral-50 radius-12" 
+                           placeholder="Email"
+                           [(ngModel)]="email"
+                           name="email"
+                           required>
+                </div>
+                <div class="icon-field mb-16">
+                    <span class="icon top-50 translate-middle-y">
+                        <iconify-icon icon="solar:lock-password-outline"></iconify-icon>
+                    </span>
+                    <input type="password" 
+                           class="form-control h-56-px bg-neutral-50 radius-12" 
+                           placeholder="Password"
+                           [(ngModel)]="password"
+                           name="password"
+                           required>
+                </div>
+                <div class="icon-field mb-16">
+                    <span class="icon top-50 translate-middle-y">
+                        <iconify-icon icon="flowbite:users-group-outline"></iconify-icon>
+                    </span>
+                    <select class="form-control h-56-px bg-neutral-50 radius-12"
+                            [(ngModel)]="role"
+                            name="role"
+                            required>
+                        <option value="">Choisir un rôle</option>
+                        <option value="RH">RH</option>
+                        <option value="Technique">Technique</option>
+                        <option value="Candidat">Candidat</option>
+                    </select>
+                </div>
+
+                <button type="submit" 
+                        class="btn btn-primary text-sm btn-sm px-12 py-16 w-100 radius-12 mt-32"
+                        [disabled]="isLoading">
+                    {{ isLoading ? 'Inscription...' : 'Sign Up' }}
+                </button>
+
+                <div class="mt-32 text-center text-sm">
+                    <p class="mb-0">Already have an account? 
+                        <a routerLink="/login" class="text-primary-600 fw-semibold">Sign In</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

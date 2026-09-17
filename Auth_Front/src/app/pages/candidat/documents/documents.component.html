@@ -1,0 +1,76 @@
+<app-navbar/>
+<main class="dashboard-main">
+  <div class="navbar-header">
+    <div class="row align-items-center justify-content-between">
+      <div class="col-auto"><h6 class="mb-0">Mes Documents</h6></div>
+    </div>
+  </div>
+  <div class="dashboard-main-body">
+
+    @if (successMessage) { <div class="alert alert-success">{{ successMessage }}</div> }
+    @if (errorMessage)   { <div class="alert alert-danger">{{ errorMessage }}</div> }
+
+    <!-- Upload -->
+    <div class="card mb-24">
+      <div class="card-header"><h5 class="card-title mb-0">Ajouter un document</h5></div>
+      <div class="card-body">
+        <div class="row gy-3">
+          <div class="col-md-4">
+            <label class="form-label">Type de document</label>
+            <select class="form-select" [(ngModel)]="selectedType">
+              <option value="CV">CV</option>
+              <option value="LETTRE_MOTIVATION">Lettre de motivation</option>
+              <option value="DIPLOME">Diplôme</option>
+              <option value="AUTRE">Autre</option>
+            </select>
+          </div>
+          <div class="col-md-8">
+            <label class="form-label">Fichier (PDF, Word, image)</label>
+            <input type="file" class="form-control" (change)="onFileSelected($event)"
+              accept=".pdf,.doc,.docx,.jpg,.png">
+          </div>
+        </div>
+        @if (uploading) { <p class="text-primary mt-2">Upload en cours...</p> }
+      </div>
+    </div>
+
+    <!-- Liste documents -->
+    <div class="card">
+      <div class="card-header"><h5 class="card-title mb-0">Mes documents</h5></div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table bordered-table mb-0">
+            <thead>
+              <tr>
+                <th>Nom du fichier</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (documents.length === 0) {
+                <tr><td colspan="4" class="text-center py-20">Aucun document uploadé</td></tr>
+              }
+              @for (doc of documents; track doc.id) {
+                <tr>
+                  <td>{{ doc.nomFichier }}</td>
+                  <td><span class="badge bg-primary-100 text-primary-600">{{ doc.typeDocument }}</span></td>
+                  <td>{{ doc.dateTelechargement | date:'dd/MM/yyyy' }}</td>
+                  <td class="text-center">
+                    <a [href]="doc.url" target="_blank" class="btn btn-sm btn-outline-primary me-2">
+                      <iconify-icon icon="lucide:download"></iconify-icon> Voir
+                    </a>
+                    <button (click)="onDelete(doc.id)" class="btn btn-sm btn-outline-danger">
+                      <iconify-icon icon="lucide:trash-2"></iconify-icon>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

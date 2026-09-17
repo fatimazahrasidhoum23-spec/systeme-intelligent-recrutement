@@ -1,0 +1,38 @@
+# ── Secrets / env ─────────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ── .NET (AuthService, service-email) ───────────────────────────────────
+**/bin/
+**/obj/
+*.user
+*.csproj.Backup.tmp
+
+# ── Java / Maven (OffreRh) ───────────────────────────────────────────────
+**/target/
+*.class
+
+# ── Python (Service_ATS) ─────────────────────────────────────────────────
+**/__pycache__/
+*.pyc
+**/venv/
+**/.venv/
+**/chroma_db/
+
+# ── PHP / Symfony (my_project) ───────────────────────────────────────────
+my_project/var/
+my_project/vendor/
+my_project/.env.local
+
+# ── Angular / Node (Auth_Front) ──────────────────────────────────────────
+**/node_modules/
+**/dist/
+**/.angular/
+
+# ── OS / IDE ──────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+.DS_Store
+*.log
