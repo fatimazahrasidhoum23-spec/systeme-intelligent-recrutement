@@ -21,6 +21,7 @@ Plateforme de recrutement (ATS) construite en architecture microservices. Le sys
 
 
 **Espace RH**
+<img width="1600" height="743" alt="image" src="https://github.com/user-attachments/assets/f5526592-3559-4fb0-a955-3b43a37d68d6" />
 
 
 ## Architecture
